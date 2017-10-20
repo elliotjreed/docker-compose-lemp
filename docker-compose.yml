@@ -1,0 +1,67 @@
+# We'll use version 2 here as version 3+ is not supported on most default installs
+# (eg. latest Docker version in the current Ubuntu repositories) and it's backwards-compatible.
+version: "2"
+
+# Here we define our container services (ie. NginX, MariaDB, and PHP)
+services:
+    lemp-nginx:
+        # Use the official NginX Alpine image
+        # the Alpine image is much smaller than the default but is fine for most setups
+        image: nginx:alpine
+        # We can give the container an easilt identifiable name
+        container_name: lemp-nginx
+        # Expose ports to the host system
+        ports:
+            - "8080:80"
+        # Mount host directories or files in the container
+        volumes:
+            - ./website:/var/www/html/website:rw # With read / write access
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro # With read-only access
+        # Specify a custom network which we define under 'networks:' below
+        networks:
+            - lemp-network
+        # Linking containers specifies the start order (eg. we need PHP up before running NginX)
+        links:
+            - lemp-php
+
+    lemp-mariadb:
+        # Use the latest official MariaDB image
+        image: mariadb:latest
+        container_name: lemp-mariadb
+        volumes:
+            # We can also use data volumes so the data persists after the container is shut down, or even deleted
+            - lemp-volume-mariadb:/var/lib/mysql
+        networks:
+            - lemp-network
+        # Expose the ports to the host system
+        ports:
+            - "3306:3306"
+        # We can specify environment variables
+        # (eg. here this will create a database `exampledatabase`, a non-root user `exampleuser`, etc)
+        environment:
+            MYSQL_DATABASE: exampledatabase
+            MYSQL_USER: exampleuser
+            MYSQL_PASSWORD: exampleuserpassword
+            MYSQL_ROOT_PASSWORD: examplerootpassword
+
+    lemp-php:
+        # To build a Docker image, specify the directory containing the Dockerfile
+        # In the Dockerfile we use the latest official PHP (PHP 7+) Alpine image and install PDO for database connections
+        build: ./
+        container_name: lemp-php
+        volumes:
+            - ./website:/var/www/html/website
+        networks:
+            - lemp-network
+        # Here we link MariaDB so we can have MariaDB start before PHP
+        links:
+            - lemp-mariadb
+
+# Here we define our network so we can have multiple docker-compose setups running which will not cross-over each other
+networks:
+    lemp-network:
+        driver: bridge
+
+# Here we specify our data volume(s)
+volumes:
+    lemp-volume-mariadb:
