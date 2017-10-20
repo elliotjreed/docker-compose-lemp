@@ -25,71 +25,109 @@ Docker Compose is a far easier way of managing multiple containers than the stan
 The current Docker Compose configuration format is version 3, but version 2 is currently more popular.
 
 Once a `docker-compose.yml` file is created run:
-`docker-compose up`
+```
+docker-compose up
+```
 
 To run it daemonised (in the background) add `-d`:
-`docker-compose up -d`
+```
+docker-compose up -d
+```
 
 If running in the background / daemonised, you can view the logs with:
-`docker-compose logs`
+```
+docker-compose logs
+```
 
 To build the images without running them, run:
-`docker-compose build`
+```
+docker-compose build
+```
 
 # A Little Introduction to Docker
 
 ## Basic Docker commands
 
 ### Pull latest CentOS image
-`docker pull centos`
+```
+docker pull centos
+```
 
 ### Pull CentOS 6 image
-`docker pull centos:6`
+```
+docker pull centos:6
+```
 
 ### Pull latest official Ubuntu image and run default ENTRYPOINT (/bin/bash)
-`docker run -it ubuntu`
+```
+docker run -it ubuntu
+```
 
 ### Run alternative ENTRYPOINT on latest Ubuntu
-`docker run -it ubuntu /bin/sh`
+```
+docker run -it ubuntu /bin/sh
+```
 
 ### Execute command on running container
 For example, run the `yes` command on Ubuntu.
 
-`docker exec -it ubuntu yes`
+```
+docker exec -it ubuntu yes
+```
 
 ## Managing containers
 
 ### List all containers
-`docker ps`
+```
+docker ps
+```
 
 ### Remove Docker container
-`docker rm <container name or hash>`
+```
+docker rm <container name or hash>
+```
 
 ### List Docker networks
-`docker network ls`
+```
+docker network ls
+```
 
 ### Remove Docker network
-`docker network rm <network name>`
+```
+docker network rm <network name>
+```
 
 ### List Docker images
-`docker images`
+```
+docker images
+```
 
 ### Remove Docker image
-`docker rmi <image name or hash>`
+```
+docker rmi <image name or hash>
+```
 
 ### List Docker volumes
-`docker volume ls`
+```
+docker volume ls
+```
 
 ### Remove Docker volume
-`docker volume rm <volume name>`
+```
+docker volume rm <volume name>
+```
 
 ### Build Docker image from Dockerfile
 All is needed is to specify the path of the Dockerfile.
 
-`docker build ./`
+```
+docker build ./
+```
 
 ### Show container information
-`docker inspect <container name or hash>`
+```
+docker inspect <container name or hash>
+```
 
 ## Pushing to DockerHub
 Once a custom image has been built it can be pushed to DockerHub or another Docker repository.
@@ -97,12 +135,24 @@ Once a custom image has been built it can be pushed to DockerHub or another Dock
 Images can be _tagged_ with a version or note. This is useful for when you have variations on a base image, eg. you could have MariaDB on one and MySQL on another.
 
 ### Tag built Docker image with name
-`docker tag <hash> dockerhubusername/example-image:mariadb`
-`docker tag <hash> dockerhubusername/example-image:mysql`
+```
+docker tag <hash> dockerhubusername/example-image:mariadb
+```
+
+```
+docker tag <hash> dockerhubusername/example-image:mysql
+```
 
 ### Tag built Docker image with version number
-`docker tag <hash> dockerhubusername/example-image:1`
+```
+docker tag <hash> dockerhubusername/example-image:1
+```
 
 ### Push to DockerHub
-`docker push dockerhubusername/example-image:1`
-`docker push dockerhubusername/example-image:mysql`
+```
+docker push dockerhubusername/example-image:1
+```
+
+```
+docker push dockerhubusername/example-image:mysql
+```
